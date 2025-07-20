@@ -17,6 +17,7 @@ praatio==6.2.0
 pyopenjtalk==0.4.1
 PySocks==1.7.1
 pystoi==0.4.1
+resampy==0.4.3
 s3prl==0.4.15
 sacrebleu==2.4.2
 tensorboard==2.17.0
