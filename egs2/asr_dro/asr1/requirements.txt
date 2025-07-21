@@ -18,7 +18,7 @@ pyopenjtalk==0.4.1
 PySocks==1.7.1
 pystoi==0.4.1
 # resampy==0.4.3
-s3prl==0.4.15
+s3prl==0.4.18
 sacrebleu==2.4.2
 tensorboard==2.17.0
 torch-optimizer==0.3.0
