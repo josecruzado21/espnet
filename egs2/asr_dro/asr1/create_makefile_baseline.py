@@ -1,6 +1,6 @@
 LR = [1e-4]
 MODELS = {'xlsr':'XLSR', 'mms':'MMS'}
-EXP='exp001'
+EXP='exp_002'
 
 file = open(f'{EXP}_m.mk', 'r').read()
 file += '\n\n'

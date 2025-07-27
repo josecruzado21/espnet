@@ -1,4 +1,4 @@
-DUMP_DIR_BASE=scr/dum
+DUMP_DIR_BASE=scr/dump
 EXP_DIR_BASE=scr/exp
 ASR_STATS_DIR_BASE=scr/exp
 SUFFIX=_lid
