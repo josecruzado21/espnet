@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $USER_SCTK_INSTALL_DIR]; then
+if [ $USER_SCTK_INSTALL_DIR ]; then
     INSTALL_DIR=$USER_SCTK_INSTALL_DIR
 else
     INSTALL_DIR="../../../espnet/tools/installers/"
