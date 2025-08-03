@@ -43,7 +43,7 @@ install_sctk() {
 check_sclite
 
 # Put default exp_dir here
-exp_dir="/scr/exp001"
+exp_dir="/scr/exp_002"
 
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
