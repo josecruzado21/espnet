@@ -32,7 +32,8 @@ COMMON_EVAL_ARGS=\
 	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
 
 EVAL_CMD=\
-	./local/score.sh $(COMMON_EVAL_ARGS) > results/$(EXPERIMENT_ID)/$@.txt
+	./local/score.sh true false normal scr/exp_exp_002/asr_train_mms_ctc_aleb_0.0001
+# 	./local/score.sh $(COMMON_EVAL_ARGS) > results/$(EXPERIMENT_ID)/$@.txt
 
 SCEB_PARAMS=\
 	--batch_type language 
