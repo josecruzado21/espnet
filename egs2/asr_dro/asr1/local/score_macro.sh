@@ -39,8 +39,9 @@ install_sctk() {
         echo "SCTK is already installed in $INSTALL_DIR."
     fi
 }
-
+echo "Checking for sclite in $INSTALL_DIR..."
 check_sclite
+echo "End of checking for sclite."
 
 # Put default exp_dir here
 exp_dir="/scr/exp_002"
