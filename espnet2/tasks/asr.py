@@ -609,6 +609,8 @@ class ASRTask(AbsTask):
         )
 
         # 7. Build model
+        print("model section")
+        breakpoint()
         try:
             model_class = model_choices.get_class(args.model)
         except AttributeError:
