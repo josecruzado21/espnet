@@ -610,11 +610,8 @@ class ASRTask(AbsTask):
 
         # 7. Build model
         try:
-            print("argumentos todos", args)
-            print("encontro modelo",args.model)
             model_class = model_choices.get_class(args.model)
         except AttributeError:
-            print("espnet")
             model_class = model_choices.get_class("espnet")
         model = model_class(
             vocab_size=vocab_size,
