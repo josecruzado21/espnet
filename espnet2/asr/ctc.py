@@ -87,7 +87,7 @@ class CTC(torch.nn.Module):
                 smoothing=smoothing,
                 normalize_grad=normalize_grad,
                 agg=agg,
-                cer=cer,
+                **kwargs
             )
 
         else:
@@ -95,11 +95,11 @@ class CTC(torch.nn.Module):
 
         self.reduce = reduce
 
-    def loss_fn(self, th_pred, th_target, th_ilen, th_olen, utt_id=None, valid=False, cer = 0.0) -> torch.Tensor:
+    def loss_fn(self, th_pred, th_target, th_ilen, th_olen, utt_id=None, valid=False, **kwargs) -> torch.Tensor:
         if self.ctc_type == "builtin" or self.ctc_type == "brctc" or self.ctc_type == 'droctc':
             th_pred = th_pred.log_softmax(2)
             if self.ctc_type == 'droctc':
-                loss = self.ctc_loss(th_pred, th_target, th_ilen, th_olen, utt_id, valid=valid, cer=cer)
+                loss = self.ctc_loss(th_pred, th_target, th_ilen, th_olen, utt_id, valid=valid, **kwargs)
             else:
                 loss = self.ctc_loss(th_pred, th_target, th_ilen, th_olen)
             if self.ctc_type == "builtin":

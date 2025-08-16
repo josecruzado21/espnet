@@ -10,7 +10,7 @@ import pdb
 
 class DROCTCLoss(torch.nn.Module):
     def __init__(self, blank=0, reduction='mean', zero_infinity=False, dro_group_count=0, dro_step_size=0.01, dro_q_epsilon=1e-10,
-    accumulation=False, smoothing=0, agg="sum", normalize_grad=True, cer=None):
+    accumulation=False, smoothing=0, agg="sum", normalize_grad=True, **kwargs):
         super().__init__()
         self.blank = blank
         self.reduction = reduction
@@ -26,7 +26,7 @@ class DROCTCLoss(torch.nn.Module):
 
         self.accumulation = accumulation
         self.smoothing = smoothing
-        self.cer = cer
+        self.cer = kwargs.get("cer", 0.0)
 
     def init_weights(self, train_file, valid_file):
         group_sizes = {}
