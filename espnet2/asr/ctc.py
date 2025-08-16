@@ -95,11 +95,11 @@ class CTC(torch.nn.Module):
 
         self.reduce = reduce
 
-    def loss_fn(self, th_pred, th_target, th_ilen, th_olen, utt_id=None, valid=False) -> torch.Tensor:
+    def loss_fn(self, th_pred, th_target, th_ilen, th_olen, utt_id=None, valid=False, cer = 0.0) -> torch.Tensor:
         if self.ctc_type == "builtin" or self.ctc_type == "brctc" or self.ctc_type == 'droctc':
             th_pred = th_pred.log_softmax(2)
             if self.ctc_type == 'droctc':
-                loss = self.ctc_loss(th_pred, th_target, th_ilen, th_olen, utt_id, valid=valid)
+                loss = self.ctc_loss(th_pred, th_target, th_ilen, th_olen, utt_id, valid=valid, cer=cer)
             else:
                 loss = self.ctc_loss(th_pred, th_target, th_ilen, th_olen)
             if self.ctc_type == "builtin":
@@ -176,7 +176,7 @@ class CTC(torch.nn.Module):
         else:
             raise NotImplementedError
 
-    def forward(self, hs_pad, hlens, ys_pad, ys_lens, utt_id=None, valid=False):
+    def forward(self, hs_pad, hlens, ys_pad, ys_lens, utt_id=None, valid=False, cer=0.0):
         """Calculate CTC loss.
 
         Args:
@@ -194,7 +194,7 @@ class CTC(torch.nn.Module):
             )
             return loss
         elif self.ctc_type == "droctc":
-            loss = self.loss_fn(ys_hat, ys_pad, hlens, ys_lens, utt_id, valid=valid).to(
+            loss = self.loss_fn(ys_hat, ys_pad, hlens, ys_lens, utt_id, valid=valid, cer=cer).to(
                 device=hs_pad.device, dtype=hs_pad.dtype
             )
             return loss
