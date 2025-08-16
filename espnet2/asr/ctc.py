@@ -176,7 +176,7 @@ class CTC(torch.nn.Module):
         else:
             raise NotImplementedError
 
-    def forward(self, hs_pad, hlens, ys_pad, ys_lens, utt_id=None, valid=False, cer=0.0):
+    def forward(self, hs_pad, hlens, ys_pad, ys_lens, utt_id=None, valid=False, **kwargs):
         """Calculate CTC loss.
 
         Args:
@@ -194,7 +194,7 @@ class CTC(torch.nn.Module):
             )
             return loss
         elif self.ctc_type == "droctc":
-            loss = self.loss_fn(ys_hat, ys_pad, hlens, ys_lens, utt_id, valid=valid, cer=cer).to(
+            loss = self.loss_fn(ys_hat, ys_pad, hlens, ys_lens, utt_id, valid=valid, **kwargs).to(
                 device=hs_pad.device, dtype=hs_pad.dtype
             )
             return loss
