@@ -14,7 +14,7 @@ for step_size in STEP_SIZE:
 for step_size in STEP_SIZE:
     for smoothing in SMOOTHING:
         for model in MODELS.keys():
-            file += f"train_asr_{model}_aleb_dro_{step_size}_base:\n\t./run_multi.sh $(COMMON_TRAIN_ARGS) $({MODELS[model]}_LOSS_CTC_{float(step_size)}_BASE_ARGS) $(ALEB_PARAMS)\n\n"
+            file += f"train_asr_{model}_aleb_dro_{step_size}_base:\n\t./run_multi.sh $(COMMON_TRAIN_ARGS) $({MODELS[model]}_LOSS_CTC_{float(step_size)}_BASE_ARGS) $(SCEB_PARAMS)\n\n"
 
 for step_size in STEP_SIZE:
     for smoothing in SMOOTHING:
