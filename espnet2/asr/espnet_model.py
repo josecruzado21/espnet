@@ -588,16 +588,18 @@ class ESPnetASRModel(AbsESPnetModel):
         utt_id: List[str] = None,
         valid: bool = False
     ):
-        # Calc CTC loss
-        # print("Inside ", valid)
-        # print(self.ctc)
-        loss_ctc = self.ctc(encoder_out, encoder_out_lens, ys_pad, ys_pad_lens, utt_id=utt_id, valid=valid)
-
+        
         # Calc CER using CTC
         cer_ctc = None
         if not self.training and self.error_calculator is not None:
             ys_hat = self.ctc.argmax(encoder_out).data
             cer_ctc = self.error_calculator(ys_hat.cpu(), ys_pad.cpu(), is_ctc=True)
+
+        # Calc CTC loss
+        # print("Inside ", valid)
+        # print(self.ctc)
+        loss_ctc = self.ctc(encoder_out, encoder_out_lens, ys_pad, ys_pad_lens, utt_id=utt_id, valid=valid, cer = cer_ctc)
+
         return loss_ctc, cer_ctc
 
     def _calc_transducer_loss(

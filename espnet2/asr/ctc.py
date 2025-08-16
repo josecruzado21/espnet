@@ -39,7 +39,8 @@ class CTC(torch.nn.Module):
         brctc_risk_strategy: str = "exp",
         brctc_group_strategy: str = "end",
         brctc_risk_factor: float = 0.0,
-        agg: str = "sum"
+        agg: str = "sum",
+        cer: float = None,
     ):
         super().__init__()
         eprojs = encoder_output_size
@@ -85,7 +86,8 @@ class CTC(torch.nn.Module):
                 accumulation=accumulation,
                 smoothing=smoothing,
                 normalize_grad=normalize_grad,
-                agg=agg
+                agg=agg,
+                cer=cer,
             )
 
         else:
