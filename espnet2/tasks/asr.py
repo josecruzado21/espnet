@@ -610,6 +610,7 @@ class ASRTask(AbsTask):
 
         # 7. Build model
         try:
+            print("argumentos todos": args)
             print("encontro modelo",args.model)
             model_class = model_choices.get_class(args.model)
         except AttributeError:
