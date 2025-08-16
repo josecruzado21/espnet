@@ -596,9 +596,8 @@ class ESPnetASRModel(AbsESPnetModel):
             cer_ctc = self.error_calculator(ys_hat.cpu(), ys_pad.cpu(), is_ctc=True)
 
         # Calc CTC loss
-        print("Inside ", valid)
-        print(self.ctc)
-        breakpoint()
+        # print("Inside ", valid)
+        # print(self.ctc)
         loss_ctc = self.ctc(encoder_out, encoder_out_lens, ys_pad, ys_pad_lens, utt_id=utt_id, valid=valid, cer = cer_ctc)
 
         return loss_ctc, cer_ctc

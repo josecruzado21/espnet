@@ -53,7 +53,7 @@ class DROCTCLoss(torch.nn.Module):
             for _ in range(len(group_sizes)):
                 self.group_losses[_] = []
 
-    def forward(self, log_probs: Tensor, targets: Tensor, input_lengths: Tensor, target_lengths: Tensor, utt_id: List[str], valid: bool = True) -> Tensor:
+    def forward(self, log_probs: Tensor, targets: Tensor, input_lengths: Tensor, target_lengths: Tensor, utt_id: List[str], valid: bool = True, **kwargs) -> Tensor:
         log_probs = torch.transpose(log_probs, 0, 1)
 
         batch_lang_ids = [self.utt2category[_] for _ in utt_id]
