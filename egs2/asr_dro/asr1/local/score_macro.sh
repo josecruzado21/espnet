@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $USER_SCTK_INSTALL_DIR]; then
+if [ $USER_SCTK_INSTALL_DIR ]; then
     INSTALL_DIR=$USER_SCTK_INSTALL_DIR
 else
     INSTALL_DIR="../../../espnet/tools/installers/"
@@ -43,7 +43,7 @@ install_sctk() {
 check_sclite
 
 # Put default exp_dir here
-exp_dir="/scr/exp001"
+exp_dir="/scr/exp1_group_dro_base"
 
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
