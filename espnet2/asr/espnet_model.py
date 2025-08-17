@@ -595,7 +595,7 @@ class ESPnetASRModel(AbsESPnetModel):
             print("Inside CER calculation")
             ys_hat = self.ctc.argmax(encoder_out).data
             print("ys_hat", ys_hat[0:10])
-            print("ys_pad", ys_hat[0:10])
+            print("ys_pad", ys_pad[0:10])
             cer_ctc = self.error_calculator(ys_hat.cpu(), ys_pad.cpu(), is_ctc=True)
         print("Calculated CER_CTC", cer_ctc)
 
