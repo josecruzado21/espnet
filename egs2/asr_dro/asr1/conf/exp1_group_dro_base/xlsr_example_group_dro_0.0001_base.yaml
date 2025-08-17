@@ -1,6 +1,6 @@
 accum_grad: 16
 batch_size: 4
-batch_type: sorted
+batch_type: language
 best_model_criterion:
 - - valid
   - loss
