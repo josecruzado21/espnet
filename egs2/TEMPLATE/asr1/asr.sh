@@ -299,7 +299,7 @@ fi
 if [ "${USER_SCTK_INSTALL_DIR:-}" ]; then
     INSTALL_DIR="$USER_SCTK_INSTALL_DIR"
 else
-    INSTALL_DIR="../../../espnet/tools/installers/"
+    INSTALL_DIR="../../espnet/tools/installers/"
 fi
 
 check_sclite() {
