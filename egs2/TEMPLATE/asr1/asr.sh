@@ -298,7 +298,7 @@ fi
 ##### Install sclite ########
 if [ "${USER_SCTK_INSTALL_DIR:-}" ]; then
     INSTALL_DIR="$USER_SCTK_INSTALL_DIR"
-elset
+else
     INSTALL_DIR="../../../espnet/tools/installers/"
 fi
 
