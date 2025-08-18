@@ -595,6 +595,7 @@ class ESPnetASRModel(AbsESPnetModel):
 
         # Calc CER using CTC
         cer_ctc = None
+        print("Traditional CTC update")
         if not self.training and self.error_calculator is not None:
             ys_hat = self.ctc.argmax(encoder_out).data
             cer_ctc = self.error_calculator(ys_hat.cpu(), ys_pad.cpu(), is_ctc=True)
