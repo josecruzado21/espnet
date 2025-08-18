@@ -590,6 +590,7 @@ class ESPnetASRModel(AbsESPnetModel):
     ):
         
         # Calc CER using CTC
+        print("CER based update")
         cer_ctc = None
         if self.error_calculator is not None:
             ys_hat = self.ctc.argmax(encoder_out).data
