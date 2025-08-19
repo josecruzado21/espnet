@@ -26,6 +26,8 @@ class DROCTCLoss(torch.nn.Module):
 
         self.accumulation = accumulation
         self.smoothing = smoothing
+        print(kwargs)
+        print(kwargs.get("cer", 0.0))
         self.cer = torch.tensor(kwargs.get("cer", 0.0))
 
     def init_weights(self, train_file, valid_file):
