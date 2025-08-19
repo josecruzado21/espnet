@@ -54,7 +54,8 @@ class DROCTCLoss(torch.nn.Module):
 
     def forward(self, log_probs: Tensor, targets: Tensor, input_lengths: Tensor, target_lengths: Tensor, utt_id: List[str], valid: bool = True, **kwargs) -> Tensor:
         cer_calculated = torch.tensor(kwargs.get("cer", 0.0))
-        print("Forward pass with CER update:", cer_calculated)
+        print("Valid", valid, flush=True)
+        print("Forward pass with CER update:", cer_calculated,flush=True)
         log_probs = torch.transpose(log_probs, 0, 1)
 
         batch_lang_ids = [self.utt2category[_] for _ in utt_id]
