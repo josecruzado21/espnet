@@ -43,7 +43,7 @@ install_sctk() {
 check_sclite
 
 # Put default exp_dir here
-exp_dir="/scr/exp1_group_dro_base"
+exp_dir="/scr/exp2_group_dro_baseline_params_auto_group_dro"
 
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
