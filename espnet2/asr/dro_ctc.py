@@ -10,7 +10,7 @@ import pdb
 
 class DROCTCLoss(torch.nn.Module):
     def __init__(self, blank=0, reduction='mean', zero_infinity=False, dro_group_count=0, dro_step_size=0.01, dro_q_epsilon=1e-10,
-    accumulation=False, smoothing=0, agg="sum", normalize_grad=True, **kwargs):
+    accumulation=False, smoothing=0, agg="sum", normalize_grad=True):
         super().__init__()
         self.blank = blank
         self.reduction = reduction
@@ -26,8 +26,6 @@ class DROCTCLoss(torch.nn.Module):
 
         self.accumulation = accumulation
         self.smoothing = smoothing
-        print(kwargs)
-        print(kwargs.get("cer", 0.0))
         self.cer = torch.tensor(kwargs.get("cer", 0.0))
 
     def init_weights(self, train_file, valid_file):
@@ -56,6 +54,8 @@ class DROCTCLoss(torch.nn.Module):
                 self.group_losses[_] = []
 
     def forward(self, log_probs: Tensor, targets: Tensor, input_lengths: Tensor, target_lengths: Tensor, utt_id: List[str], valid: bool = True, **kwargs) -> Tensor:
+        cer_calculated = torch.tensor(kwargs.get("cer", 0.0))
+        print("Forward pass with CER update:", cer_calculated)
         log_probs = torch.transpose(log_probs, 0, 1)
 
         batch_lang_ids = [self.utt2category[_] for _ in utt_id]
@@ -92,14 +92,14 @@ class DROCTCLoss(torch.nn.Module):
                 if not self.accumulation:
                     if self.smoothing > 0:
                         # add the smoothing hyperparameter
-                        self.dro_q[q_ix] *= torch.exp((self.cer * step_size) / (self.dro_q[q_ix] + self.smoothing))
-                        print("Update Magnitude", torch.exp((self.cer * step_size) / (self.dro_q[q_ix] + self.smoothing)))
+                        self.dro_q[q_ix] *= torch.exp((cer_calculated * step_size) / (self.dro_q[q_ix] + self.smoothing))
+                        print("Update Magnitude", torch.exp((cer_calculated * step_size) / (self.dro_q[q_ix] + self.smoothing)))
                     else:
-                        self.dro_q[q_ix] *= torch.exp(self.cer * step_size)
-                        print("Update Magnitude", torch.exp(self.cer * step_size))
+                        self.dro_q[q_ix] *= torch.exp(cer_calculated * step_size)
+                        print("Update Magnitude", torch.exp(cer_calculated * step_size))
                 else:
                     print("Loss Stored")
-                    self.group_losses[q_ix].append(self.cer)
+                    self.group_losses[q_ix].append(cer_calculated)
 
             if self.accumulation:
                 check = True
