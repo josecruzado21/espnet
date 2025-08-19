@@ -40,6 +40,7 @@ class CTC(torch.nn.Module):
         brctc_group_strategy: str = "end",
         brctc_risk_factor: float = 0.0,
         agg: str = "sum",
+        **kwargs
     ):
         super().__init__()
         eprojs = encoder_output_size
@@ -86,6 +87,7 @@ class CTC(torch.nn.Module):
                 smoothing=smoothing,
                 normalize_grad=normalize_grad,
                 agg=agg,
+                **kwargs
             )
 
         else:
