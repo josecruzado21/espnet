@@ -25,8 +25,7 @@ COMMON_ARGS=\
 
 COMMON_TRAIN_ARGS=\
 	$(COMMON_ARGS) \
-	--stage 13 \
-	--stop_stage 13 \
+	--stage 11 \
 	--asr_tag $@
 
 COMMON_EVAL_ARGS=\
