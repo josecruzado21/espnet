@@ -1,5 +1,5 @@
 Brotli==1.0.9
-chainer==6.0.0
+chainer==7.8.1
 espnet-model-zoo==0.1.7
 fairscale==0.4.13
 gdown==5.2.0
@@ -14,7 +14,7 @@ nara-wpe==0.0.10
 nnmnkwii==0.1.3
 pip==24.0
 praatio==6.2.0
-pyopenjtalk==0.3.3
+pyopenjtalk==0.4.1
 PySocks==1.7.1
 pystoi==0.4.1
 s3prl==0.4.15
