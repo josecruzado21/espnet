@@ -28,8 +28,10 @@ COMMON_TRAIN_ARGS=\
 	--stage 11 \
 	--asr_tag $@
 
+# Original dev scoring (disabled):
+# --exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
+
 COMMON_EVAL_ARGS=\
-	# --exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
 	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/test_1h_lid/score_cer/
 
 EVAL_CMD=\
