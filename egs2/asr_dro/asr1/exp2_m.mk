@@ -1,7 +1,7 @@
 .ONESHELL:
 
 include cluster_info.mk
-EXPERIMENT_ID=exp1
+EXPERIMENT_ID=exp2
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
@@ -29,7 +29,7 @@ COMMON_TRAIN_ARGS=\
 	--asr_tag $@
 
 COMMON_EVAL_ARGS=\
-	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/test_1h_lid/score_cer/
+	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
 
 EVAL_CMD=\
 	./local/score_macro.sh $(COMMON_EVAL_ARGS) > results/$(EXPERIMENT_ID)/$@.txt
@@ -70,43 +70,3 @@ results/$(EXPERIMENT_ID)/:
 
 activate-venv:
 	source ../../../tools/activate_python.sh 
-
-MMS_LOSS_CTC_0.0001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.0001_base.yaml
-
-XLSR_LOSS_CTC_0.0001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/xlsr_example_group_dro_0.0001_base.yaml
-
-MMS_LOSS_CTC_0.001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.001_base.yaml
-
-XLSR_LOSS_CTC_0.001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/xlsr_example_group_dro_0.001_base.yaml
-
-train_asr_mms_aleb_dro_0.0001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_BASE_ARGS) $(ALEB_PARAMS)
-
-train_asr_xlsr_aleb_dro_0.0001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.0001_BASE_ARGS) $(ALEB_PARAMS)
-
-train_asr_mms_aleb_dro_0.001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_BASE_ARGS) $(ALEB_PARAMS)
-
-train_asr_xlsr_aleb_dro_0.001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.001_BASE_ARGS) $(ALEB_PARAMS)
-
-eval_asr_mms_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_xlsr_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_mms_aleb_dro_0.001_base: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_xlsr_aleb_dro_0.001_base: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval-all: /
-	make eval_asr_mms_aleb_dro_0.0001_base /
-	make eval_asr_xlsr_aleb_dro_0.0001_base /
-	make eval_asr_mms_aleb_dro_0.001_base /
-	make eval_asr_xlsr_aleb_dro_0.001_base /
-	echo 'All done'
-

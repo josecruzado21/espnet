@@ -1,7 +1,7 @@
 .ONESHELL:
 
 include cluster_info.mk
-EXPERIMENT_ID=exp_001
+EXPERIMENT_ID=exp2
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
@@ -70,3 +70,25 @@ results/$(EXPERIMENT_ID)/:
 
 activate-venv:
 	source ../../../tools/activate_python.sh 
+
+XLSR_LOSS_CTC_0.0001_ARGS= --asr_config conf/$(EXPERIMENT_ID)/xlsr_example_baseline_0.0001.yaml
+
+MMS_LOSS_CTC_0.0001_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_baseline_0.0001.yaml
+
+train_xlsr_ctc_aleb_0.0001:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.0001_ARGS) $(BASE_PARAMS)
+
+train_mms_ctc_aleb_0.0001:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_ARGS) $(BASE_PARAMS)
+
+eval_xlsr_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD)
+
+eval_mms_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD)
+
+eval-all: /
+	make eval_xlsr_ctc_aleb_0.0001 /
+	make eval_mms_ctc_aleb_0.0001 /
+	echo 'All done'
+
