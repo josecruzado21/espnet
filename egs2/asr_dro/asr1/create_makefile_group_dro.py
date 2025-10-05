@@ -1,7 +1,7 @@
 STEP_SIZE = [1e-4, 1e-3]
 SMOOTHING = [0.0]
 MODELS = {'mms':'MMS', 'xlsr':'XLSR'}
-EXP='exp2'
+EXP='exp3'
 
 file = open(f'{EXP}_m.mk', 'r').read()
 file += '\n\n'
