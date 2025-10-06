@@ -93,15 +93,15 @@ class DROCTCLoss(torch.nn.Module):
             for idx in y_hat_collapsed:
                 idx = int(idx)
                 if idx != -1 and idx != self.blank:
-                    seq_hat.append(str(idx))
+                    seq_hat.append(idx)
 
             for idx in y_true_numpy:
                 idx = int(idx)
                 if idx != -1 and idx != self.blank:
-                    seq_true.append(str(idx))
+                    seq_true.append(idx)
             
-            hyp_chars = "".join(seq_hat)
-            ref_chars = "".join(seq_true)
+            hyp_chars = seq_hat
+            ref_chars = seq_true
             
             if len(ref_chars) > 0:
                 ops = Levenshtein.opcodes(hyp_chars, ref_chars)
