@@ -7,6 +7,9 @@ import torch.nn.functional as F
 from typeguard import typechecked
 from torch import Tensor
 import pdb 
+import editdistance
+from itertools import groupby
+import time
 
 class DROCTCLoss(torch.nn.Module):
     def __init__(self, blank=0, reduction='mean', zero_infinity=False, dro_group_count=0, dro_step_size=0.01, dro_q_epsilon=1e-10,
@@ -20,6 +23,7 @@ class DROCTCLoss(torch.nn.Module):
 
         self.dro_q = torch.ones(self.dro_group_count) * 1.0/self.dro_group_count
         self.dro_q_epsilon = dro_q_epsilon
+        self.cers = torch.ones(self.dro_group_count) # JC TO DO: Try different initialization
         self.group_id_to_ix = {}
         self.agg = agg
         self.normalize_grad = normalize_grad
@@ -70,6 +74,59 @@ class DROCTCLoss(torch.nn.Module):
             zero_infinity=self.zero_infinity
         )
 
+        # Beginning of code for CER calculation
+        beginning_time_cer = time.time()
+        ys_hat = log_probs.argmax(dim=-1).transpose(0, 1)
+
+        per_utt_cer_stats = []
+
+        for i in range(len(losses)):
+            y_hat = ys_hat[i][:input_lengths[i]]
+            y_true = targets[i][:target_lengths[i]]
+            
+            y_hat_collapsed = [x[0] for x in groupby(y_hat.cpu().numpy())]
+            y_true_numpy = y_true.cpu().numpy()
+            
+            seq_hat, seq_true = [], []
+            
+            for idx in y_hat_collapsed:
+                idx = int(idx)
+                if idx != -1 and idx != self.blank and idx != self.idx_space:
+                    seq_hat.append(str(idx))
+
+            for idx in y_true_numpy:
+                idx = int(idx)
+                if idx != -1 and idx != self.blank and idx != self.idx_space:
+                    seq_true.append(str(idx))
+            
+            hyp_chars = "".join(seq_hat)
+            ref_chars = "".join(seq_true)
+            
+            if len(ref_chars) > 0:
+                ops = editdistance.opcodes(hyp_chars, ref_chars)
+                insertions = sum(1 for op in ops if op[0] == 'insert')
+                deletions = sum(1 for op in ops if op[0] == 'delete')
+                substitutions = sum(1 for op in ops if op[0] == 'replace')
+                total = len(ref_chars)
+            else:
+                insertions = len(hyp_chars)
+                deletions = 0
+                substitutions = 0
+                total = 0
+            
+            stats_dict = {
+                # 'utt_id': utt_id[i],
+                'insertions': insertions,
+                'deletions': deletions,
+                'substitutions': substitutions,
+                'total': total,
+            }
+            per_utt_cer_stats.append(stats_dict)
+        end_time_cer = time.time()
+        print("Time calculating CER:", end_time_cer - beginning_time_cer, "seconds")
+        # End for code for CER calculation
+
+
         # print stuff
         for i in range(len(losses)):
             lang_id = batch_lang_ids[i]
@@ -77,10 +134,11 @@ class DROCTCLoss(torch.nn.Module):
             loss_value = losses[i]
             input_length = input_lengths[i]
             target_length = target_lengths[i]
+            cer_stats = stats_dict[i]
             if valid:
-                print(f"Validation Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}")
+                print(f"Validation Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
             else:
-                print(f"Training Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}")
+                print(f"Training Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
 
         step_size = self.dro_step_size
 
