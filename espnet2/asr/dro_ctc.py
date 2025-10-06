@@ -105,9 +105,9 @@ class DROCTCLoss(torch.nn.Module):
             
             if len(ref_chars) > 0:
                 ops = Levenshtein.opcodes(hyp_chars, ref_chars)
-                insertions = sum(1 for op in ops if op[0] == 'insert')
-                deletions = sum(1 for op in ops if op[0] == 'delete')
-                substitutions = sum(1 for op in ops if op[0] == 'replace')
+                insertions = sum((j2 - j1) for tag, i1, i2, j1, j2 in ops if tag == 'insert')
+                deletions = sum((i2 - i1) for tag, i1, i2, j1, j2 in ops if tag == 'delete')
+                substitutions = sum((i2 - i1) for tag, i1, i2, j1, j2 in ops if tag == 'replace')
                 total = len(ref_chars)
             else:
                 insertions = len(hyp_chars)
@@ -137,9 +137,9 @@ class DROCTCLoss(torch.nn.Module):
             target_length = target_lengths[i]
             cer_stats = per_utt_cer_stats[i]
             if valid:
-                print(f"Validation Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
+                print(f"Validation Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (hyp, ref) = ({hyp_chars, ref_chars}), (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
             else:
-                print(f"Training Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
+                print(f"Training Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (hyp, ref) = ({hyp_chars, ref_chars}), (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
 
         step_size = self.dro_step_size
 
