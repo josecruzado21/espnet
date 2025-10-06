@@ -10,6 +10,7 @@ import pdb
 import editdistance
 from itertools import groupby
 import time
+import Levenshtein
 
 class DROCTCLoss(torch.nn.Module):
     def __init__(self, blank=0, reduction='mean', zero_infinity=False, dro_group_count=0, dro_step_size=0.01, dro_q_epsilon=1e-10,
@@ -103,7 +104,7 @@ class DROCTCLoss(torch.nn.Module):
             ref_chars = "".join(seq_true)
             
             if len(ref_chars) > 0:
-                ops = editdistance.opcodes(hyp_chars, ref_chars)
+                ops = Levenshtein.opcodes(hyp_chars, ref_chars)
                 insertions = sum(1 for op in ops if op[0] == 'insert')
                 deletions = sum(1 for op in ops if op[0] == 'delete')
                 substitutions = sum(1 for op in ops if op[0] == 'replace')
@@ -134,7 +135,7 @@ class DROCTCLoss(torch.nn.Module):
             loss_value = losses[i]
             input_length = input_lengths[i]
             target_length = target_lengths[i]
-            cer_stats = stats_dict[i]
+            cer_stats = per_utt_cer_stats[i]
             if valid:
                 print(f"Validation Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
             else:
