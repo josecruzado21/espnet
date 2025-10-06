@@ -91,12 +91,12 @@ class DROCTCLoss(torch.nn.Module):
             
             for idx in y_hat_collapsed:
                 idx = int(idx)
-                if idx != -1 and idx != self.blank and idx != self.idx_space:
+                if idx != -1 and idx != self.blank:
                     seq_hat.append(str(idx))
 
             for idx in y_true_numpy:
                 idx = int(idx)
-                if idx != -1 and idx != self.blank and idx != self.idx_space:
+                if idx != -1 and idx != self.blank:
                     seq_true.append(str(idx))
             
             hyp_chars = "".join(seq_hat)
