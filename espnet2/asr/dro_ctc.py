@@ -141,14 +141,14 @@ class DROCTCLoss(torch.nn.Module):
             cer_stats = per_utt_cer_stats[i]
             hyp_chars, ref_chars = per_utt_hyp_ref[i]
             if valid:
-                print(f"Validation Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (hyp, ref) = ({hyp_chars, ref_chars}), Length ref_chars = {len(ref_chars)}, (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
+                print(f"Validation Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (hyp, ref) = ({hyp_chars, ref_chars}), Target-ref equal length = {len(ref_chars) == target_length}, (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
             else:
-                print(f"Training Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (hyp, ref) = ({hyp_chars, ref_chars}), Length ref_chars = {len(ref_chars)}, (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
+                print(f"Training Sample {i}: Language = {lang_id}, Filename = {filename}, Loss = {loss_value}, Input Length = {input_length}, Target Length = {target_length}, (hyp, ref) = ({hyp_chars, ref_chars}), Target-ref equal length = {len(ref_chars) == target_length}, (I, D, S, T) = ({cer_stats['insertions']}, {cer_stats['deletions']}, {cer_stats['substitutions']}, {cer_stats['total']})")
 
         step_size = self.dro_step_size
 
         if not valid:
-            for q_ix in set(batch_lang_q_indices): # unique set of groups in batch
+            for q_ix in set(batch_lang_q_indices):
                 group_losses = torch.tensor([
                     losses[i]
                     for i in range(losses.shape[0])
