@@ -67,7 +67,7 @@ class DROCTCLoss(torch.nn.Module):
             if lang_id not in self.group_id_to_ix:
                 self.group_id_to_ix[lang_id] = len(self.group_id_to_ix)
             batch_lang_q_indices.append(self.group_id_to_ix[lang_id])
-
+        ix_to_group_id = {index: lang_name for lang_name, index in self.group_id_to_ix.items()}
         losses = F.ctc_loss(
             log_probs, 
             targets, input_lengths, target_lengths, 
@@ -173,8 +173,8 @@ class DROCTCLoss(torch.nn.Module):
                     group_cer = (total_insertions + total_deletions + total_substitutions) / total_characters
                 else:
                     group_cer = 0.0
-                
-                print(f"Group {q_ix} CER: {group_cer:.4f} (I={total_insertions}, D={total_deletions}, S={total_substitutions}, T={total_characters})")
+
+                print(f"Group {q_ix, ix_to_group_id[q_ix]} CER: {group_cer:.4f} (I={total_insertions}, D={total_deletions}, S={total_substitutions}, T={total_characters})")
 
                 if (self.agg == "sum"):
                     group_mean_loss = torch.sum(group_losses)
@@ -187,12 +187,12 @@ class DROCTCLoss(torch.nn.Module):
                         # self.dro_q[q_ix] *= torch.exp((group_mean_loss * step_size) / (self.dro_q[q_ix] + self.smoothing))
                         self.dro_q[q_ix] *= torch.exp((group_cer * step_size) / (self.dro_q[q_ix] + self.smoothing))
                         # print("Update Magnitude", torch.exp((group_mean_loss * step_size) / (self.dro_q[q_ix] + self.smoothing)))
-                        print("Update Magnitude", torch.exp((group_cer * step_size) / (self.dro_q[q_ix] + self.smoothing)))
+                        print("Update Magnitude with CER", torch.exp((group_cer * step_size) / (self.dro_q[q_ix] + self.smoothing)))
                     else:
                         # self.dro_q[q_ix] *= torch.exp(group_mean_loss * step_size) 
                         self.dro_q[q_ix] *= torch.exp(group_cer * step_size) 
                         # print("Update Magnitude", torch.exp(group_mean_loss * step_size))
-                        print("Update Magnitude", torch.exp(group_cer * step_size))
+                        print("Update Magnitude with CER", torch.exp(group_cer * step_size))
                 else:
                     print("Loss Stored")
                     self.group_losses[q_ix].append(group_mean_loss)
@@ -228,6 +228,7 @@ class DROCTCLoss(torch.nn.Module):
                 for ix in range(losses.shape[0])
             ])
         else:
+            print("Not normalizing gradient")
             dro_losses = torch.stack([
                 losses[ix] * self.dro_q[batch_lang_q_indices[ix]] 
                 for ix in range(losses.shape[0])
