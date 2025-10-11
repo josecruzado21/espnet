@@ -24,7 +24,7 @@ class DROCTCLoss(torch.nn.Module):
 
         self.dro_q = torch.ones(self.dro_group_count) * 1.0/self.dro_group_count
         self.dro_q_epsilon = dro_q_epsilon
-        self.cers = torch.ones(self.dro_group_count) # JC TO DO: Try different initialization
+        # self.cers = torch.ones(self.dro_group_count) # JC TO DO: Try different initialization
         self.group_id_to_ix = {}
         self.agg = agg
         self.normalize_grad = normalize_grad
@@ -155,6 +155,27 @@ class DROCTCLoss(torch.nn.Module):
                     if batch_lang_q_indices[i] == q_ix
                 ])
 
+                # Calculate CER for this group
+                group_cer_stats = [
+                    per_utt_cer_stats[i]
+                    for i in range(len(per_utt_cer_stats))
+                    if batch_lang_q_indices[i] == q_ix
+                ]
+                
+                # Aggregate CER statistics for the group
+                total_insertions = sum(stats['insertions'] for stats in group_cer_stats)
+                total_deletions = sum(stats['deletions'] for stats in group_cer_stats)
+                total_substitutions = sum(stats['substitutions'] for stats in group_cer_stats)
+                total_characters = sum(stats['total'] for stats in group_cer_stats)
+                
+                # Calculate group CER
+                if total_characters > 0:
+                    group_cer = (total_insertions + total_deletions + total_substitutions) / total_characters
+                else:
+                    group_cer = 0.0
+                
+                print(f"Group {q_ix} CER: {group_cer:.4f} (I={total_insertions}, D={total_deletions}, S={total_substitutions}, T={total_characters})")
+
                 if (self.agg == "sum"):
                     group_mean_loss = torch.sum(group_losses)
                 else:
@@ -163,11 +184,15 @@ class DROCTCLoss(torch.nn.Module):
                 if not self.accumulation:
                     if self.smoothing > 0:
                         # add the smoothing hyperparameter
-                        self.dro_q[q_ix] *= torch.exp((group_mean_loss * step_size) / (self.dro_q[q_ix] + self.smoothing))
-                        print("Update Magnitude", torch.exp((group_mean_loss * step_size) / (self.dro_q[q_ix] + self.smoothing)))
+                        # self.dro_q[q_ix] *= torch.exp((group_mean_loss * step_size) / (self.dro_q[q_ix] + self.smoothing))
+                        self.dro_q[q_ix] *= torch.exp((group_cer * step_size) / (self.dro_q[q_ix] + self.smoothing))
+                        # print("Update Magnitude", torch.exp((group_mean_loss * step_size) / (self.dro_q[q_ix] + self.smoothing)))
+                        print("Update Magnitude", torch.exp((group_cer * step_size) / (self.dro_q[q_ix] + self.smoothing)))
                     else:
-                        self.dro_q[q_ix] *= torch.exp(group_mean_loss * step_size) 
-                        print("Update Magnitude", torch.exp(group_mean_loss * step_size))
+                        # self.dro_q[q_ix] *= torch.exp(group_mean_loss * step_size) 
+                        self.dro_q[q_ix] *= torch.exp(group_cer * step_size) 
+                        # print("Update Magnitude", torch.exp(group_mean_loss * step_size))
+                        print("Update Magnitude", torch.exp(group_cer * step_size))
                 else:
                     print("Loss Stored")
                     self.group_losses[q_ix].append(group_mean_loss)
