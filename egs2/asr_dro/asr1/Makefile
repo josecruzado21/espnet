@@ -1,3 +1,3 @@
 .ONESHELL:
 
-include exp4_auto_ctc_dro.mk
+include exp6_auto_ctc_dro.mk
