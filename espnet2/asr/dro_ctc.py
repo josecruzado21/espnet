@@ -171,10 +171,16 @@ class DROCTCLoss(torch.nn.Module):
                 
                 # Calculate group CER
                 if total_characters > 0:
+                    numerator_cer = total_insertions + total_deletions + total_substitutions
+                    denominator_cer = total_characters
                     group_cer = (total_insertions + total_deletions + total_substitutions) / total_characters
                 else:
+                    numerator_cer = 0
+                    denominator_cer = 0
                     group_cer = 0.0
 
+                numerator_cer_tensor = torch.tensor(numerator_cer, device=self.dro_q.device)
+                denominator_cer_tensor = torch.tensor(denominator_cer, device=self.dro_q.device)
                 group_cer_tensor = torch.tensor(group_cer, device=self.dro_q.device)
                 print(f"Group {q_ix, ix_to_group_id[q_ix]} CER: {group_cer:.4f} (I={total_insertions}, D={total_deletions}, S={total_substitutions}, T={total_characters})")
 
@@ -197,7 +203,7 @@ class DROCTCLoss(torch.nn.Module):
                         print("Update Magnitude with CER", torch.exp(group_cer_tensor * step_size))
                 else:
                     print("Loss Stored")
-                    self.group_losses[q_ix].append(group_mean_loss)
+                    self.group_losses[q_ix].append((numerator_cer_tensor, denominator_cer_tensor))
 
             if self.accumulation:
                 check = True
@@ -208,13 +214,20 @@ class DROCTCLoss(torch.nn.Module):
 
                 if check:
                     for _ in self.group_losses:
-                        update_term = sum(self.group_losses[_])/len(self.group_losses[_])
-                        if self.smoothing > 0:
-                            self.dro_q[_] *= torch.exp((update_term * step_size)/(self.dro_q[_] + self.smoothing))
-                            print("Update Magnitude", torch.exp((update_term * step_size)/(self.dro_q[_] + self.smoothing)))
+                        update_term_numerator_cer = sum(t[0] for t in self.group_losses[_])
+                        update_term_denominator_cer = sum(t[1] for t in self.group_losses[_])
+                        if update_term_denominator_cer > 0:
+                            update_term_group_cer = update_term_numerator_cer / update_term_denominator_cer
+                            print(f"Group {_} Accumulated CER: {update_term_group_cer:.4f}")
                         else:
-                            self.dro_q[_] *= torch.exp(update_term * step_size)
-                            print("Update Magnitude", torch.exp(update_term * step_size))
+                            update_term_group_cer = 0.0
+                            print(f"Group {_} Accumulated CER: {update_term_group_cer:.4f}")
+                        if self.smoothing > 0:
+                            self.dro_q[_] *= torch.exp((update_term_group_cer * step_size)/(self.dro_q[_] + self.smoothing))
+                            print("Update Magnitude using CER and accumulation", torch.exp((update_term_group_cer * step_size)/(self.dro_q[_] + self.smoothing)))
+                        else:
+                            self.dro_q[_] *= torch.exp(update_term_group_cer * step_size)
+                            print("Update Magnitude using CER and accumulation", torch.exp(update_term_group_cer * step_size))
 
                     self.normalize_dro_q()
                     for _ in self.group_losses:
