@@ -6,7 +6,7 @@ best_model_criterion:
   - loss
   - min
 ctc_conf:
-  accumulation: false
+  accumulation: true
   agg: mean
   ctc_type: droctc
   dro_group_count: 6
