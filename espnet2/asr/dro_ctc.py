@@ -175,6 +175,7 @@ class DROCTCLoss(torch.nn.Module):
                 else:
                     group_cer = 0.0
 
+                group_cer_tensor = torch.tensor(group_cer, device=self.dro_q.device)
                 print(f"Group {q_ix, ix_to_group_id[q_ix]} CER: {group_cer:.4f} (I={total_insertions}, D={total_deletions}, S={total_substitutions}, T={total_characters})")
 
                 if (self.agg == "sum"):
@@ -186,14 +187,14 @@ class DROCTCLoss(torch.nn.Module):
                     if self.smoothing > 0:
                         # add the smoothing hyperparameter
                         # self.dro_q[q_ix] *= torch.exp((group_mean_loss * step_size) / (self.dro_q[q_ix] + self.smoothing))
-                        self.dro_q[q_ix] *= torch.exp((group_cer * step_size) / (self.dro_q[q_ix] + self.smoothing))
+                        self.dro_q[q_ix] *= torch.exp((group_cer_tensor * step_size) / (self.dro_q[q_ix] + self.smoothing))
                         # print("Update Magnitude", torch.exp((group_mean_loss * step_size) / (self.dro_q[q_ix] + self.smoothing)))
-                        print("Update Magnitude with CER", torch.exp((group_cer * step_size) / (self.dro_q[q_ix] + self.smoothing)))
+                        print("Update Magnitude with CER", torch.exp((group_cer_tensor * step_size) / (self.dro_q[q_ix] + self.smoothing)))
                     else:
                         # self.dro_q[q_ix] *= torch.exp(group_mean_loss * step_size) 
-                        self.dro_q[q_ix] *= torch.exp(group_cer * step_size) 
+                        self.dro_q[q_ix] *= torch.exp(group_cer_tensor * step_size) 
                         # print("Update Magnitude", torch.exp(group_mean_loss * step_size))
-                        print("Update Magnitude with CER", torch.exp(group_cer * step_size))
+                        print("Update Magnitude with CER", torch.exp(group_cer_tensor * step_size))
                 else:
                     print("Loss Stored")
                     self.group_losses[q_ix].append(group_mean_loss)
