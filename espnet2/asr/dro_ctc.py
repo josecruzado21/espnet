@@ -28,6 +28,13 @@ class DROCTCLoss(torch.nn.Module):
         self.smoothing = smoothing
 
     def init_weights(self, train_file, valid_file):
+        group_sizes = {}
+
+        with open(str(train_file) + '/category2numbatches', 'r') as f:
+            for line in f:
+                line = line.strip().split()
+                group_sizes[line[0]] = int(line[1])
+        
         self.utt2category = {}
         with open(str(train_file) + '/utt2category', 'r') as f:
             for line in f:
@@ -41,17 +48,9 @@ class DROCTCLoss(torch.nn.Module):
                 self.utt2category[line[0]] = line[1]
 
         if self.accumulation:
-            # Get unique categories directly from utt2category
-            unique_categories = set(self.utt2category.values())
-            
-            # We can also pre-populate group_id_to_ix for deterministic indexing
-            for i, category in enumerate(sorted(unique_categories)):
-                self.group_id_to_ix[category] = i
-            
-            # Initialize group_losses with correct number of groups
             self.group_losses = {}
-            for i in range(len(unique_categories)):
-                self.group_losses[i] = []
+            for _ in range(len(group_sizes)):
+                self.group_losses[_] = []
 
     def forward(self, log_probs: Tensor, targets: Tensor, input_lengths: Tensor, target_lengths: Tensor, utt_id: List[str], valid: bool = True) -> Tensor:
         log_probs = torch.transpose(log_probs, 0, 1)
