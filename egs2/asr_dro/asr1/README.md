@@ -33,20 +33,41 @@ For a complete list of dependencies, please refer to the `requirements.txt` file
 
 ---
 
-## Installation
+## Installation Guide
 
+### 1. Clone the ESPnet Repository
+First, clone the ESPnet repository:
 ```bash
 git clone https://github.com/Bartelds/espnet.git
-cd egs2/asr_dro/asr1
+cd espnet
+```
+
+### 2. Set Up Conda Environment
+Navigate to the `tools` folder and run the setup script to create a new Conda environment:
+```bash
+cd tools
+./setup_anaconda.sh [path_to_conda_installation] [env_name] [python_version]
+```
+Example:
+```bash
+./setup_anaconda.sh /opt/anaconda3 espnet_env 3.9
+```
+
+### 3. Activate the Environment
+Activate the newly created Conda environment using the activation script provided in the same folder:
+```bash
+source activate_python.sh
+```
+
+### 4. Install Requirements
+After activating the environment, navigate to your ESPnet example folder and install the dependencies:
+```bash
+cd ../egs2/asr_dro/asr1
 pip install -r requirements.txt
 ```
 
-Note: Ensure that your [ESPnet installation](https://espnet.github.io/espnet/installation.html) is correctly configured before proceeding.
-
-Finally, activate the Python environment:
-```bash
-source ../../../tools/activate_python.sh
-```
+### 5. Verify ESPnet Installation
+Before proceeding, make sure your [ESPnet installation](https://espnet.github.io/espnet/installation.html) is correctly configured.
 
 ---
 
@@ -103,7 +124,7 @@ ctc_conf:
     normalize_grad: false
 ```
 
-Other training hyperparameters (e.g., `accum_grad`, `batch_size`, `encoder_conf`, `optim_conf`, etc.) are defined within these configuration files. For hyperparameter sweeps, adjust the global variables at the top of `lr_sweep_baseline.py`, `lr_sweep_group_dro.py`, and `lr_sweep_ctc_dro.py`, and then run these scripts to automatically generate new configuration files.
+Other training hyperparameters (e.g., `accum_grad`, `batch_size`, `encoder_conf`, `optim_conf`, etc.) are defined within these configuration files. For hyperparameter sweeps, adjust the global variables at the top of `lr_sweep_baseline.py`, `lr_sweep_group_dro.py`, and `lr_sweep_ctc_dro.py`, and then run these scripts to automatically generate new configuration files. The results must be copied in the corresponding experiment folder (e.g., `conf/exp_001/`).
 
 ---
 
