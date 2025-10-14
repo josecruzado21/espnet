@@ -1,3 +1,3 @@
 .ONESHELL:
 
-include expaux_auto_group_dro.mk
+include exp1_auto_baseline.mk
