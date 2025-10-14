@@ -69,6 +69,13 @@ pip install -r requirements.txt
 ### 5. Verify ESPnet Installation
 Before proceeding, make sure your [ESPnet installation](https://espnet.github.io/espnet/installation.html) is correctly configured.
 
+You can also install ESPnet in **editable mode** by running the following command from the **root directory** of the ESPnet repository:
+```bash
+pip install -e .
+```
+This allows you to make changes to the ESPnet source code and have them take effect immediately.
+
+
 ---
 
 ## Dataset
