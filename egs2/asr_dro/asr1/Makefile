@@ -1,3 +1,3 @@
 .ONESHELL:
 
-include exp4_auto_ctc_dro.mk
+include expaux_auto_group_dro.mk
