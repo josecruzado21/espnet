@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
     # Parse results and prepare data
     result = parse_results_file(result)
-    result_speaker = result.iloc[:-4, :]
+    result_speaker = result.iloc[:-4, :].copy()
 
     result_speaker["Weighted Err"] = result_speaker["Err"] * result_speaker["# Wrd"]
     
