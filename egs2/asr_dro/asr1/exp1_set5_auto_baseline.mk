@@ -1,7 +1,7 @@
 .ONESHELL:
 
 include cluster_info.mk
-EXPERIMENT_ID=exp1
+EXPERIMENT_ID=exp1_set5
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
@@ -27,6 +27,9 @@ COMMON_TRAIN_ARGS=\
 	$(COMMON_ARGS) \
 	--stage 11 \
 	--asr_tag $@
+
+# Original dev scoring (disabled):
+# --exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
 
 COMMON_EVAL_ARGS=\
 	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/test_1h_lid/score_cer/
@@ -71,42 +74,24 @@ results/$(EXPERIMENT_ID)/:
 activate-venv:
 	source ../../../tools/activate_python.sh 
 
-MMS_LOSS_CTC_0.0001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.0001_base.yaml
+XLSR_LOSS_CTC_0.0001_ARGS= --asr_config conf/$(EXPERIMENT_ID)/xlsr_example_baseline_0.0001.yaml
 
-XLSR_LOSS_CTC_0.0001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/xlsr_example_group_dro_0.0001_base.yaml
+MMS_LOSS_CTC_0.0001_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_baseline_0.0001.yaml
 
-MMS_LOSS_CTC_0.001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.001_base.yaml
+train_xlsr_ctc_aleb_0.0001:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.0001_ARGS) $(BASE_PARAMS)
 
-XLSR_LOSS_CTC_0.001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/xlsr_example_group_dro_0.001_base.yaml
+train_mms_ctc_aleb_0.0001:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_ARGS) $(BASE_PARAMS)
 
-train_asr_mms_aleb_dro_0.0001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_BASE_ARGS) $(BASE_PARAMS)
-
-train_asr_xlsr_aleb_dro_0.0001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.0001_BASE_ARGS) $(BASE_PARAMS)
-
-train_asr_mms_aleb_dro_0.001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_BASE_ARGS) $(BASE_PARAMS)
-
-train_asr_xlsr_aleb_dro_0.001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.001_BASE_ARGS) $(BASE_PARAMS)
-
-eval_asr_mms_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
+eval_xlsr_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD)
 
-eval_asr_xlsr_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_mms_aleb_dro_0.001_base: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_xlsr_aleb_dro_0.001_base: results/$(EXPERIMENT_ID)/
+eval_mms_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD)
 
 eval-all: /
-	make eval_asr_mms_aleb_dro_0.0001_base /
-	make eval_asr_xlsr_aleb_dro_0.0001_base /
-	make eval_asr_mms_aleb_dro_0.001_base /
-	make eval_asr_xlsr_aleb_dro_0.001_base /
+	make eval_xlsr_ctc_aleb_0.0001 /
+	make eval_mms_ctc_aleb_0.0001 /
 	echo 'All done'
 
