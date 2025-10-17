@@ -5,8 +5,8 @@ EXPERIMENT_ID=exp1_set5_cerupdate
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
-SELECTED_LANGUAGES=pol,spa,ces,ron,nan,cmn
-DATASETS=M-AILABS,voxforge,commonvoice,fleurs,commonvoice,fleurs
+SELECTED_LANGUAGES=eng,deu,heb,jpn,rus,spa
+DATASETS=voxforge,voxforge,fleurs,fleurs,fleurs,fleurs
 
 DUMP_DIR=$(DUMP_DIR_BASE)_$(EXPERIMENT_ID)
 EXP_DIR=$(EXP_DIR_BASE)_$(EXPERIMENT_ID)
