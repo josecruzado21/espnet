@@ -1,7 +1,7 @@
 .ONESHELL:
 
 include cluster_info.mk
-EXPERIMENT_ID=exp3_set5
+EXPERIMENT_ID=exprep_set5
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
