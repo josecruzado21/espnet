@@ -35,13 +35,12 @@ COMMON_EVAL_ARGS_TEST=\
 	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
 
 EVAL_CMD_DEV=\
+	mkdir -p results/dev/$(EXPERIMENT_ID) && \
 	./local/score_macro.sh $(COMMON_EVAL_ARGS_DEV) > results/dev/$(EXPERIMENT_ID)/$@.txt
 
 EVAL_CMD_TEST=\
+	mkdir -p results/test/$(EXPERIMENT_ID) && \
 	./local/score_macro.sh $(COMMON_EVAL_ARGS_TEST) > results/test/$(EXPERIMENT_ID)/$@.txt
-
-EVAL_CMD=\
-	./local/score_macro.sh $(COMMON_EVAL_ARGS) > results/$(EXPERIMENT_ID)/$@.txt
 
 SCEB_PARAMS=\
 	--batch_type language 
