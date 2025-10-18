@@ -66,6 +66,11 @@ cd ../egs2/asr_dro/asr1
 pip install -r requirements.txt
 ```
 
+It might also be necessary to install sox with the following command:
+```bash
+conda install -c conda-forge sox
+```
+
 ### 5. Verify ESPnet Installation
 Before proceeding, make sure your [ESPnet installation](https://espnet.github.io/espnet/installation.html) is correctly configured.
 
