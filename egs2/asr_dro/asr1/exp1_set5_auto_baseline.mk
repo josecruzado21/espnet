@@ -31,11 +31,17 @@ COMMON_TRAIN_ARGS=\
 # Original dev scoring (disabled):
 # --exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
 
-COMMON_EVAL_ARGS=\
+COMMON_EVAL_ARGS_DEV=\
 	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/test_1h_lid/score_cer/
 
-EVAL_CMD=\
-	./local/score_macro.sh $(COMMON_EVAL_ARGS) > results/$(EXPERIMENT_ID)/$@.txt
+COMMON_EVAL_ARGS_TEST=\
+	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
+
+EVAL_CMD_DEV=\
+	./local/score_macro.sh $(COMMON_EVAL_ARGS_DEV) > results/dev/$(EXPERIMENT_ID)/$@.txt
+
+EVAL_CMD_TEST=\
+	./local/score_macro.sh $(COMMON_EVAL_ARGS_TEST) > results/test/$(EXPERIMENT_ID)/$@.txt
 
 SCEB_PARAMS=\
 	--batch_type language 
@@ -84,14 +90,9 @@ train_xlsr_ctc_aleb_0.0001:
 train_mms_ctc_aleb_0.0001:
 	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_ARGS) $(BASE_PARAMS)
 
-eval_xlsr_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
+eval_dev_mms_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_DEV)
 
-eval_mms_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval-all: /
-	make eval_xlsr_ctc_aleb_0.0001 /
-	make eval_mms_ctc_aleb_0.0001 /
-	echo 'All done'
+eval_test_mms_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_TEST)
 

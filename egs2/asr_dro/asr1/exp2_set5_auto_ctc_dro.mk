@@ -28,11 +28,17 @@ COMMON_TRAIN_ARGS=\
 	--stage 11 \
 	--asr_tag $@
 
-COMMON_EVAL_ARGS=\
+COMMON_EVAL_ARGS_DEV=\
 	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/test_1h_lid/score_cer/
 
-EVAL_CMD=\
-	./local/score_macro.sh $(COMMON_EVAL_ARGS) > results/$(EXPERIMENT_ID)/$@.txt
+COMMON_EVAL_ARGS_TEST=\
+	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
+
+EVAL_CMD_DEV=\
+	./local/score_macro.sh $(COMMON_EVAL_ARGS_DEV) > results/dev/$(EXPERIMENT_ID)/$@.txt
+
+EVAL_CMD_TEST=\
+	./local/score_macro.sh $(COMMON_EVAL_ARGS_TEST) > results/test/$(EXPERIMENT_ID)/$@.txt
 
 SCEB_PARAMS=\
 	--batch_type language 
@@ -98,87 +104,8 @@ XLSR_LOSS_CTC_0.001_LA_1.0_ALEB_ARGS= --asr_config conf/$(EXPERIMENT_ID)/xlsr_ex
 train_asr_mms_aleb_dro_0.0001_la_0.1:
 	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_LA_0.1_ALEB_ARGS) $(BASE_PARAMS)
 
-train_asr_xlsr_aleb_dro_0.0001_la_0.1:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.0001_LA_0.1_ALEB_ARGS) $(BASE_PARAMS)
+eval_dev_asr_mms_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_DEV)
 
-train_asr_mms_aleb_dro_0.0001_la_0.5:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_LA_0.5_ALEB_ARGS) $(BASE_PARAMS)
-
-train_asr_xlsr_aleb_dro_0.0001_la_0.5:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.0001_LA_0.5_ALEB_ARGS) $(BASE_PARAMS)
-
-train_asr_mms_aleb_dro_0.0001_la_1.0:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_LA_1.0_ALEB_ARGS) $(BASE_PARAMS)
-
-train_asr_xlsr_aleb_dro_0.0001_la_1.0:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.0001_LA_1.0_ALEB_ARGS) $(BASE_PARAMS)
-
-train_asr_mms_aleb_dro_0.001_la_0.1:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_LA_0.1_ALEB_ARGS) $(BASE_PARAMS)
-
-train_asr_xlsr_aleb_dro_0.001_la_0.1:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.001_LA_0.1_ALEB_ARGS) $(BASE_PARAMS)
-
-train_asr_mms_aleb_dro_0.001_la_0.5:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_LA_0.5_ALEB_ARGS) $(BASE_PARAMS)
-
-train_asr_xlsr_aleb_dro_0.001_la_0.5:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.001_LA_0.5_ALEB_ARGS) $(BASE_PARAMS)
-
-train_asr_mms_aleb_dro_0.001_la_1.0:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_LA_1.0_ALEB_ARGS) $(BASE_PARAMS)
-
-train_asr_xlsr_aleb_dro_0.001_la_1.0:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.001_LA_1.0_ALEB_ARGS) $(BASE_PARAMS)
-
-eval_asr_mms_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_xlsr_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_mms_aleb_dro_0.0001_la_0.5: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_xlsr_aleb_dro_0.0001_la_0.5: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_mms_aleb_dro_0.0001_la_1.0: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_xlsr_aleb_dro_0.0001_la_1.0: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_mms_aleb_dro_0.001_la_0.1: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_xlsr_aleb_dro_0.001_la_0.1: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_mms_aleb_dro_0.001_la_0.5: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_xlsr_aleb_dro_0.001_la_0.5: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_mms_aleb_dro_0.001_la_1.0: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval_asr_xlsr_aleb_dro_0.001_la_1.0: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval-all: /
-	make eval_asr_mms_aleb_dro_0.0001_la_0.1 /
-	make eval_asr_xlsr_aleb_dro_0.0001_la_0.1 /
-	make eval_asr_mms_aleb_dro_0.0001_la_0.5 /
-	make eval_asr_xlsr_aleb_dro_0.0001_la_0.5 /
-	make eval_asr_mms_aleb_dro_0.0001_la_1.0 /
-	make eval_asr_xlsr_aleb_dro_0.0001_la_1.0 /
-	make eval_asr_mms_aleb_dro_0.001_la_0.1 /
-	make eval_asr_xlsr_aleb_dro_0.001_la_0.1 /
-	make eval_asr_mms_aleb_dro_0.001_la_0.5 /
-	make eval_asr_xlsr_aleb_dro_0.001_la_0.5 /
-	make eval_asr_mms_aleb_dro_0.001_la_1.0 /
-	make eval_asr_xlsr_aleb_dro_0.001_la_1.0 /
-	echo 'All done'
-
+eval_test_asr_mms_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_TEST)
