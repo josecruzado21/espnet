@@ -89,10 +89,19 @@ MMS_LOSS_CTC_0.001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_gro
 XLSR_LOSS_CTC_0.001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/xlsr_example_group_dro_0.001_base.yaml
 
 train_asr_mms_aleb_dro_0.0001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_BASE_ARGS) $(ALEB_PARAMS)
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_BASE_ARGS) $(BASE_PARAMS)
 
 eval_dev_asr_mms_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_DEV)
 
 eval_test_asr_mms_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_TEST)
+
+train_asr_mms_aleb_dro_0.0001_la_1.0:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_LA_1.0_ALEB_ARGS) $(BASE_PARAMS)
+
+eval_dev_asr_mms_aleb_dro_0.0001_la_1.0: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_DEV)
+
+eval_test_asr_mms_aleb_dro_0.0001_la_1.0: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_TEST)
