@@ -113,3 +113,12 @@ eval_dev_asr_mms_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
 eval_test_asr_mms_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_TEST)
 
+train_asr_mms_aleb_dro_0.0001_la_1.0:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_LA_1.0_ALEB_ARGS) $(BASE_PARAMS)
+
+eval_dev_asr_mms_aleb_dro_0.0001_la_1.0: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_DEV)
+
+eval_test_asr_mms_aleb_dro_0.0001_la_1.0: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_TEST)
+
