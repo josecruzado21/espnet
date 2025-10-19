@@ -1,7 +1,7 @@
 import yaml
 
 smoothing = [0.0]
-step_size = [1e-5, 1e-4, 1e-3, 1e-2]
+step_size = [1e-3]
 
 def sweep_files(file_path):
     for s in smoothing:

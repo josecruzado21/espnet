@@ -1,6 +1,6 @@
 import yaml
 
-LR = [1e-4]
+LR = [1e-3]
 
 def sweep_files(file_path):
     for lr in LR:
@@ -18,4 +18,4 @@ def sweep_files(file_path):
 
 if __name__=='__main__':
     sweep_files('mms_example_baseline')
-    sweep_files('xlsr_example_baseline')
+    # sweep_files('xlsr_example_baseline')
