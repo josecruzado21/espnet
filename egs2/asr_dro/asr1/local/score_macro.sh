@@ -20,7 +20,7 @@ check_sclite() {
 
 # Function to install SCTK
 install_sctk() {
-    if [ ! -d "$INSTALL_DIR" ]; then
+    if [ ! -d "$INSTALL_DIR/bin/sclite" ]; then
         mkdir -p "$INSTALL_DIR"
         cd "$INSTALL_DIR" || exit
         

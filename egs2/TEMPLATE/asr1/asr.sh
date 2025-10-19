@@ -313,7 +313,7 @@ check_sclite() {
 }
 
 install_sctk() {
-    if [ ! -d "$INSTALL_DIR" ]; then
+    if [ ! -d "$INSTALL_DIR/bin/sclite" ]; then
         mkdir -p "$INSTALL_DIR"
         cd "$INSTALL_DIR" || exit
         git clone https://github.com/usnistgov/SCTK.git .
