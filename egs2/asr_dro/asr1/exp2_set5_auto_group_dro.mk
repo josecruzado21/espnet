@@ -29,10 +29,10 @@ COMMON_TRAIN_ARGS=\
 	--asr_tag $@
 
 COMMON_EVAL_ARGS_DEV=\
-	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_test_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
+	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_dev_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
 
 COMMON_EVAL_ARGS_TEST=\
-	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_dev_,,$@)/decode_asr_asr_model_valid.loss.best/test_1h_lid/score_cer/
+	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_test_,,$@)/decode_asr_asr_model_valid.loss.best/test_1h_lid/score_cer/
 
 EVAL_CMD_DEV=\
 	mkdir -p results/dev/$(EXPERIMENT_ID) && \
