@@ -2,4 +2,4 @@
 
 include exp1_s5new_auto_ctc_dro.mk
 include exp1_s5new_auto_group_dro.mk
-include exp1_s5new_set5_auto_baseline.mk
+include exp1_s5new_auto_baseline.mk
