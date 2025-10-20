@@ -82,12 +82,12 @@ activate-venv:
 
 MMS_LOSS_CTC_0.001_LA_1.0_ALEB_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_ctc_dro_0.001_la_1.0.yaml
 
-train_asr_mms_aleb_dro_0.0001_la_1.0:
+train_asr_mms_aleb_dro_0.001_la_1.0:
 	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_LA_1.0_ALEB_ARGS) $(ALEB_PARAMS)
 
-eval_dev_asr_mms_aleb_dro_0.0001_la_1.0: results/$(EXPERIMENT_ID)/
+eval_dev_asr_mms_aleb_dro_0.001_la_1.0: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_DEV)
 
-eval_test_asr_mms_aleb_dro_0.0001_la_1.0: results/$(EXPERIMENT_ID)/
+eval_test_asr_mms_aleb_dro_0.001_la_1.0: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_TEST)
 
