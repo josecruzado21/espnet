@@ -84,8 +84,8 @@ MMS_LOSS_CTC_0.0001_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_baselin
 train_mms_ctc_aleb_0.0001:
 	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_ARGS) $(ALEB_PARAMS)
 
-eval_dev_asr_mms_aleb_0.0001: results/$(EXPERIMENT_ID)/
+eval_dev_mms_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_DEV)
 
-eval_test_asr_mms_aleb_0.0001: results/$(EXPERIMENT_ID)/
+eval_test_mms_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_TEST)
