@@ -1,7 +1,7 @@
 import yaml
 
-smoothing = [0.1, 0.5, 1.0]
-step_size = [1e-4, 1e-3]
+smoothing = [1.0]
+step_size = [1e-3]
 
 def sweep_files(file_path):
     for s in smoothing:
@@ -28,4 +28,4 @@ def sweep_files(file_path):
 
 if __name__=='__main__':
     sweep_files('mms_example_ctc_dro')
-    sweep_files('xlsr_example_ctc_dro')
+    # sweep_files('xlsr_example_ctc_dro')

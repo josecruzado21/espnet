@@ -28,14 +28,19 @@ COMMON_TRAIN_ARGS=\
 	--stage 11 \
 	--asr_tag $@
 
-# Original dev scoring (disabled):
-# --exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
+COMMON_EVAL_ARGS_DEV=\
+	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_dev_,,$@)/decode_asr_asr_model_valid.loss.best/org/dev_1h_lid/score_cer/
 
-COMMON_EVAL_ARGS=\
-	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_,,$@)/decode_asr_asr_model_valid.loss.best/test_1h_lid/score_cer/
+COMMON_EVAL_ARGS_TEST=\
+	--exp_dir $(EXP_DIR)/asr_train_$(subst eval_test_,,$@)/decode_asr_asr_model_valid.loss.best/test_1h_lid/score_cer/
 
-EVAL_CMD=\
-	./local/score_macro.sh $(COMMON_EVAL_ARGS) > results/$(EXPERIMENT_ID)/$@.txt
+EVAL_CMD_DEV=\
+	mkdir -p results/dev/$(EXPERIMENT_ID) && \
+	./local/score_macro.sh $(COMMON_EVAL_ARGS_DEV) > results/dev/$(EXPERIMENT_ID)/$@.txt
+
+EVAL_CMD_TEST=\
+	mkdir -p results/test/$(EXPERIMENT_ID) && \
+	./local/score_macro.sh $(COMMON_EVAL_ARGS_TEST) > results/test/$(EXPERIMENT_ID)/$@.txt
 
 SCEB_PARAMS=\
 	--batch_type language 
@@ -74,24 +79,13 @@ results/$(EXPERIMENT_ID)/:
 activate-venv:
 	source ../../../tools/activate_python.sh 
 
-XLSR_LOSS_CTC_0.0001_ARGS= --asr_config conf/$(EXPERIMENT_ID)/xlsr_example_baseline_0.0001.yaml
-
 MMS_LOSS_CTC_0.0001_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_baseline_0.0001.yaml
-
-train_xlsr_ctc_aleb_0.0001:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(XLSR_LOSS_CTC_0.0001_ARGS) $(ALEB_PARAMS)
 
 train_mms_ctc_aleb_0.0001:
 	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_ARGS) $(ALEB_PARAMS)
 
-eval_xlsr_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
+eval_dev_asr_mms_aleb_0.0001: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_DEV)
 
-eval_mms_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD)
-
-eval-all: /
-	make eval_xlsr_ctc_aleb_0.0001 /
-	make eval_mms_ctc_aleb_0.0001 /
-	echo 'All done'
-
+eval_test_asr_mms_aleb_0.0001: results/$(EXPERIMENT_ID)/
+	$(EVAL_CMD_TEST)
