@@ -1,7 +1,7 @@
 .ONESHELL:
 
 include cluster_info.mk
-EXPERIMENT_ID=exprep_set5
+EXPERIMENT_ID=exprep2_set5
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
@@ -79,13 +79,13 @@ results/$(EXPERIMENT_ID)/:
 activate-venv:
 	source ../../../tools/activate_python.sh 
 
-MMS_LOSS_CTC_0.001_LA_1.0_ALEB_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_ctc_dro_0.001_la_1.0.yaml
+MMS_LOSS_CTC_0.0001_LA_0.1_ALEB_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_ctc_dro_0.0001_la_0.1.yaml
 
-train_asr_mms_aleb_dro_0.001_la_1.0:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_LA_1.0_ALEB_ARGS) $(ALEB_PARAMS)
+train_asr_mms_aleb_dro_0.0001_la_0.1:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_LA_0.1_ALEB_ARGS) $(ALEB_PARAMS)
 
-eval_dev_asr_mms_aleb_dro_0.001_la_1.0: results/$(EXPERIMENT_ID)/
+eval_dev_asr_mms_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_DEV)
 
-eval_test_asr_mms_aleb_dro_0.001_la_1.0: results/$(EXPERIMENT_ID)/
+eval_test_asr_mms_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_TEST)

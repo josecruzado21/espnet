@@ -1,7 +1,7 @@
 .ONESHELL:
 
 include cluster_info.mk
-EXPERIMENT_ID=exprep_set5
+EXPERIMENT_ID=exprep2_set5
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
@@ -54,24 +54,24 @@ BASE_PARAMS=\
 PREPROCESS_ARGS=\
 	--asr_config conf/$(EXPERIMENT_ID)/train_asr.yaml
 
-# preprocess:
-# 	./run_multi.sh \
-# 		$(COMMON_ARGS) \
-# 		$(PREPROCESS_ARGS) \
-# 		--stop_stage 10
+preprocess:
+	./run_multi.sh \
+		$(COMMON_ARGS) \
+		$(PREPROCESS_ARGS) \
+		--stop_stage 10
 
-# preprocess-groups:
-# 	python scripts/dro_scripts/create_groups.py  \
-# 		--utt2spk-file $(DUMP_DIR)/raw/dev_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
-# 		--out-utt2category-file $(DUMP_DIR)/raw/dev_$(DATA_SUBSET)$(SUFFIX)/utt2category 
+preprocess-groups:
+	python scripts/dro_scripts/create_groups.py  \
+		--utt2spk-file $(DUMP_DIR)/raw/dev_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
+		--out-utt2category-file $(DUMP_DIR)/raw/dev_$(DATA_SUBSET)$(SUFFIX)/utt2category 
 
-# 	python scripts/dro_scripts/create_groups.py  \
-# 		--utt2spk-file $(DUMP_DIR)/raw/train_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
-# 		--out-utt2category-file $(DUMP_DIR)/raw/train_$(DATA_SUBSET)$(SUFFIX)/utt2category 
+	python scripts/dro_scripts/create_groups.py  \
+		--utt2spk-file $(DUMP_DIR)/raw/train_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
+		--out-utt2category-file $(DUMP_DIR)/raw/train_$(DATA_SUBSET)$(SUFFIX)/utt2category 
 
-# 	python scripts/dro_scripts/create_groups.py  \
-# 		--utt2spk-file $(DUMP_DIR)/raw/test_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
-# 		--out-utt2category-file $(DUMP_DIR)/raw/test_$(DATA_SUBSET)$(SUFFIX)/utt2category 
+	python scripts/dro_scripts/create_groups.py  \
+		--utt2spk-file $(DUMP_DIR)/raw/test_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
+		--out-utt2category-file $(DUMP_DIR)/raw/test_$(DATA_SUBSET)$(SUFFIX)/utt2category 
 
 results/$(EXPERIMENT_ID)/:
 	mkdir -p results/$(EXPERIMENT_ID)/
@@ -82,7 +82,7 @@ activate-venv:
 MMS_LOSS_CTC_0.0001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.0001_base.yaml
 
 train_asr_mms_aleb_dro_0.0001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_BASE_ARGS) $(BASE_PARAMS)
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_BASE_ARGS) $(SCEB_PARAMS)
 
 eval_dev_asr_mms_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_DEV)
