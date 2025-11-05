@@ -1,7 +1,7 @@
 import yaml
 
 smoothing = [0.0]
-step_size = [1e-5, 1e-4, 1e-3, 1e-2]
+step_size = [1e-3]
 
 def sweep_files(file_path):
     for s in smoothing:
@@ -29,4 +29,3 @@ def sweep_files(file_path):
 
 if __name__=='__main__':
     sweep_files('mms_example_group_dro')
-    sweep_files('xlsr_example_group_dro')

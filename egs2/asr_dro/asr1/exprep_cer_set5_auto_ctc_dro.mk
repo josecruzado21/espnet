@@ -1,7 +1,7 @@
 .ONESHELL:
 
 include cluster_info.mk
-EXPERIMENT_ID=exp2_set5_cerupdate
+EXPERIMENT_ID=exprep_cer_set5
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
@@ -54,24 +54,24 @@ BASE_PARAMS=\
 PREPROCESS_ARGS=\
 	--asr_config conf/$(EXPERIMENT_ID)/train_asr.yaml
 
-preprocess:
-	./run_multi.sh \
-		$(COMMON_ARGS) \
-		$(PREPROCESS_ARGS) \
-		--stop_stage 10
+# preprocess:
+# 	./run_multi.sh \
+# 		$(COMMON_ARGS) \
+# 		$(PREPROCESS_ARGS) \
+# 		--stop_stage 10
 
-preprocess-groups:
-	python scripts/dro_scripts/create_groups.py  \
-		--utt2spk-file $(DUMP_DIR)/raw/dev_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
-		--out-utt2category-file $(DUMP_DIR)/raw/dev_$(DATA_SUBSET)$(SUFFIX)/utt2category 
+# preprocess-groups:
+# 	python scripts/dro_scripts/create_groups.py  \
+# 		--utt2spk-file $(DUMP_DIR)/raw/dev_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
+# 		--out-utt2category-file $(DUMP_DIR)/raw/dev_$(DATA_SUBSET)$(SUFFIX)/utt2category 
 
-	python scripts/dro_scripts/create_groups.py  \
-		--utt2spk-file $(DUMP_DIR)/raw/train_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
-		--out-utt2category-file $(DUMP_DIR)/raw/train_$(DATA_SUBSET)$(SUFFIX)/utt2category 
+# 	python scripts/dro_scripts/create_groups.py  \
+# 		--utt2spk-file $(DUMP_DIR)/raw/train_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
+# 		--out-utt2category-file $(DUMP_DIR)/raw/train_$(DATA_SUBSET)$(SUFFIX)/utt2category 
 
-	python scripts/dro_scripts/create_groups.py  \
-		--utt2spk-file $(DUMP_DIR)/raw/test_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
-		--out-utt2category-file $(DUMP_DIR)/raw/test_$(DATA_SUBSET)$(SUFFIX)/utt2category 
+# 	python scripts/dro_scripts/create_groups.py  \
+# 		--utt2spk-file $(DUMP_DIR)/raw/test_$(DATA_SUBSET)$(SUFFIX)/utt2spk \
+# 		--out-utt2category-file $(DUMP_DIR)/raw/test_$(DATA_SUBSET)$(SUFFIX)/utt2category 
 
 results/$(EXPERIMENT_ID)/:
 	mkdir -p results/$(EXPERIMENT_ID)/
@@ -79,23 +79,13 @@ results/$(EXPERIMENT_ID)/:
 activate-venv:
 	source ../../../tools/activate_python.sh 
 
-MMS_LOSS_CTC_0.001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.001_base.yaml
-MMS_LOSS_CTC_0.01_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.01_base.yaml
+MMS_LOSS_CTC_0.001_LA_1.0_ALEB_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_ctc_dro_0.001_la_1.0.yaml
 
-train_asr_mms_aleb_dro_0.001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_BASE_ARGS) $(ALEB_PARAMS)
+train_asr_mms_aleb_dro_0.001_la_1.0:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_LA_1.0_ALEB_ARGS) $(ALEB_PARAMS)
 
-eval_dev_asr_mms_aleb_dro_0.001_base: results/$(EXPERIMENT_ID)/
+eval_dev_asr_mms_aleb_dro_0.001_la_1.0: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_DEV)
 
-eval_test_asr_mms_aleb_dro_0.001_base: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD_TEST)
-
-train_asr_mms_aleb_dro_0.01_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.01_BASE_ARGS) $(ALEB_PARAMS)
-
-eval_dev_asr_mms_aleb_dro_0.01_base: results/$(EXPERIMENT_ID)/
-	$(EVAL_CMD_DEV)
-
-eval_test_asr_mms_aleb_dro_0.01_base: results/$(EXPERIMENT_ID)/
+eval_test_asr_mms_aleb_dro_0.001_la_1.0: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_TEST)
