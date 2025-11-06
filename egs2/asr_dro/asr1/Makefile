@@ -1,4 +1,4 @@
 .ONESHELL:
 
-include exprep_cer_set5_auto_group_dro.mk
-include exprep_cer_set5_auto_ctc_dro.mk
+include exprep2_cer_set5_auto_group_dro.mk
+include exprep2_cer_set5_auto_ctc_dro.mk
