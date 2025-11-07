@@ -79,13 +79,13 @@ results/$(EXPERIMENT_ID)/:
 activate-venv:
 	source ../../../tools/activate_python.sh 
 
-MMS_LOSS_CTC_0.0001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.0001_base.yaml
+MMS_LOSS_CTC_0.001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.001_base.yaml
 
-train_asr_mms_aleb_dro_0.0001_base:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_BASE_ARGS) $(BASE_PARAMS)
+train_asr_mms_aleb_dro_0.001_base:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.001_BASE_ARGS) $(BASE_PARAMS)
 
-eval_dev_asr_mms_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
+eval_dev_asr_mms_aleb_dro_0.001_base: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_DEV)
 
-eval_test_asr_mms_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
+eval_test_asr_mms_aleb_dro_0.001_base: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_TEST)

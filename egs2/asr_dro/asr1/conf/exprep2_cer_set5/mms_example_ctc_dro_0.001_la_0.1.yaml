@@ -11,7 +11,7 @@ ctc_conf:
   ctc_type: droctc
   dro_group_count: 6
   dro_q_epsilon: 1.0e-10
-  dro_step_size: 0.0001
+  dro_step_size: 0.001
   normalize_grad: true
   smoothing: 0.1
 decoder: none
