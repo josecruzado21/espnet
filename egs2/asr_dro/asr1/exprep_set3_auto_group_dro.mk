@@ -1,12 +1,12 @@
 .ONESHELL:
 
 include cluster_info.mk
-EXPERIMENT_ID=exprep2_set5
+EXPERIMENT_ID=exprep_set3
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
-SELECTED_LANGUAGES=eng,deu,heb,jpn,rus,spa
-DATASETS=voxforge,voxforge,fleurs,fleurs,fleurs,fleurs
+SELECTED_LANGUAGES=khm,kor,kmr,nno,nbl,tat
+DATASETS=fleurs,fleurs,commonvoice,commonvoice,nchlt,commonvoice
 
 DUMP_DIR=$(DUMP_DIR_BASE)_$(EXPERIMENT_ID)
 EXP_DIR=$(EXP_DIR_BASE)_$(EXPERIMENT_ID)
@@ -79,13 +79,13 @@ results/$(EXPERIMENT_ID)/:
 activate-venv:
 	source ../../../tools/activate_python.sh 
 
-MMS_LOSS_CTC_0.0001_LA_0.1_ALEB_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_ctc_dro_0.0001_la_0.1.yaml
+MMS_LOSS_CTC_0.0001_BASE_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_group_dro_0.0001_base.yaml
 
-train_asr_mms_aleb_dro_0.0001_la_0.1:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_LA_0.1_ALEB_ARGS) $(ALEB_PARAMS)
+train_asr_mms_aleb_dro_0.0001_base:
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_BASE_ARGS) $(BASE_PARAMS)
 
-eval_dev_asr_mms_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
+eval_dev_asr_mms_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_DEV)
 
-eval_test_asr_mms_aleb_dro_0.0001_la_0.1: results/$(EXPERIMENT_ID)/
+eval_test_asr_mms_aleb_dro_0.0001_base: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_TEST)
