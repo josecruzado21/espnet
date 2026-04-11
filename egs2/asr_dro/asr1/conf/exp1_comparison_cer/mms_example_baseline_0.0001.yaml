@@ -35,7 +35,7 @@ num_iters_per_epoch: 1200
 num_workers: 4
 optim: adam
 optim_conf:
-  lr: 0.000025
+  lr: 0.00001666666
   weight_decay: 1.0e-06
 patience: none
 preencoder: linear
