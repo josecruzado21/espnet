@@ -82,7 +82,7 @@ activate-venv:
 MMS_LOSS_CTC_0.0001_ARGS= --asr_config conf/$(EXPERIMENT_ID)/mms_example_baseline_0.0001.yaml
 
 train_mms_ctc_aleb_0.0001:
-	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_ARGS) $(ALEB_PARAMS)
+	./run_multi.sh $(COMMON_TRAIN_ARGS) $(MMS_LOSS_CTC_0.0001_ARGS) $(BASE_PARAMS)
 
 eval_dev_mms_ctc_aleb_0.0001: results/$(EXPERIMENT_ID)/
 	$(EVAL_CMD_DEV)

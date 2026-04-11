@@ -1,5 +1,3 @@
 .ONESHELL:
 
 include exprep_set3_auto_baseline.mk
-include exprep_set3_auto_ctc_dro.mk
-include exprep_set3_auto_group_dro.mk
