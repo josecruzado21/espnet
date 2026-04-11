@@ -1,12 +1,12 @@
 .ONESHELL:
 
 include cluster_info.mk
-EXPERIMENT_ID=exprep_set3
+EXPERIMENT_ID=exp1_comparison_cer
 DATA_SUBSET=1h
 USER_SCTK_INSTALL_DIR=
 SPECIFIC_LANGUAGES=true
-SELECTED_LANGUAGES=khm,kor,kmr,nno,nbl,tat
-DATASETS=fleurs,fleurs,commonvoice,commonvoice,nchlt,commonvoice
+SELECTED_LANGUAGES=eng,deu,heb,jpn,rus,spa
+DATASETS=voxforge,voxforge,fleurs,fleurs,fleurs,fleurs
 
 DUMP_DIR=$(DUMP_DIR_BASE)_$(EXPERIMENT_ID)
 EXP_DIR=$(EXP_DIR_BASE)_$(EXPERIMENT_ID)
