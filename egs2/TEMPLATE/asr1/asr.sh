@@ -1308,6 +1308,7 @@ if [ ${stage} -le 10 ] && [ ${stop_stage} -ge 10 ] && ! [[ " ${skip_stages} " =~
             --token_type "${token_type}" \
             --token_list "${token_list}" \
             --non_linguistic_symbols "${nlsyms_txt}" \
+            --use_amp true \
             --cleaner "${cleaner}" \
             --g2p "${g2p}" \
             --train_shape_file "${_logdir}/train.JOB.scp" \
@@ -1469,6 +1470,7 @@ if [ ${stage} -le 11 ] && [ ${stop_stage} -ge 11 ] && ! [[ " ${skip_stages} " =~
             --token_type "${token_type}" \
             --token_list "${token_list}" \
             --non_linguistic_symbols "${nlsyms_txt}" \
+            --use_amp true \
             --cleaner "${cleaner}" \
             --g2p "${g2p}" \
             --valid_data_path_and_name_and_type "${_asr_valid_dir}/${_scp},speech,${_type}" \

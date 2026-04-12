@@ -31,6 +31,7 @@ keep_nbest_models: 2
 max_epoch: 40
 model_conf:
   ctc_weight: 1.0
+  extract_feats_in_collect_stats: false
 num_iters_per_epoch: 1200
 num_workers: 4
 optim: adam
