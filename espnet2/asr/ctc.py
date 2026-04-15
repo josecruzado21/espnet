@@ -108,6 +108,9 @@ class CTC(torch.nn.Module):
             if self.reduce:
                 # Batch-size average
                 loss = loss.sum() / size
+                if self.ctc_type == "builtin":
+                    print("avoid clipping")
+                    loss = loss / 6
             else:
                 loss = loss / size
             return loss
